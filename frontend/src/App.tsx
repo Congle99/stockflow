@@ -1,12 +1,5 @@
-import { AppLayout } from "./components/layout/AppLayout";
-import { DashboardPage } from "./pages/admin/DashboardPage";
-
 function App() {
-  return (
-    <AppLayout>
-      <DashboardPage />
-    </AppLayout>
-  );
+  return null;
 }
 
 export default App;

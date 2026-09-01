@@ -1,11 +1,8 @@
-import type { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
+
 import { Sidebar } from "./Sidebar";
 
-interface AppLayoutProps {
-  children: ReactNode;
-}
-
-export function AppLayout({ children }: AppLayoutProps) {
+export function AppLayout() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
@@ -34,7 +31,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         </header>
 
         <div className="p-6">
-          {children}
+          <Outlet />
         </div>
       </main>
     </div>

@@ -69,4 +69,4 @@ export function DashboardPage() {
       </Card>
     </div>
   );
-}
+}   
