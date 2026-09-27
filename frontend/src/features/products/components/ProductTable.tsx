@@ -3,9 +3,13 @@ import { ProductStatusBadge } from "./ProductStatusBadge";
 
 interface ProductTableProps {
   products: Product[];
+  onEdit: (product: Product) => void;
 }
 
-export function ProductTable({ products }: ProductTableProps) {
+export function ProductTable({
+  products,
+  onEdit,
+}: ProductTableProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
       <div className="overflow-x-auto">
@@ -93,6 +97,7 @@ export function ProductTable({ products }: ProductTableProps) {
                 <td className="whitespace-nowrap px-6 py-4 text-right">
                   <button
                     type="button"
+                    onClick={() => onEdit(product)}
                     className="text-sm font-medium text-blue-600 hover:text-blue-700"
                   >
                     Edit

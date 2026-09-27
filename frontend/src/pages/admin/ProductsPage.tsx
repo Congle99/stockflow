@@ -1,4 +1,3 @@
-
 import { useMemo, useState } from "react";
 import { Plus } from "lucide-react";
 
@@ -26,6 +25,10 @@ export function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const [editingProduct, setEditingProduct] = useState<Product | null>(
+    null,
+  );
 
   // Get unique categories
   const categories = useMemo(() => {
@@ -81,6 +84,24 @@ export function ProductsPage() {
     setIsCreateModalOpen(false);
   };
 
+  // Open edit modal
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product);
+  };
+
+  // Update product
+  const handleUpdateProduct = (updatedProduct: Product) => {
+    setProducts((current) =>
+      current.map((product) =>
+        product.id === updatedProduct.id
+          ? updatedProduct
+          : product,
+      ),
+    );
+
+    setEditingProduct(null);
+  };
+
   return (
     <>
       <div className="space-y-6">
@@ -127,7 +148,10 @@ export function ProductsPage() {
 
         {/* Product results */}
         {paginatedProducts.length > 0 ? (
-          <ProductTable products={paginatedProducts} />
+          <ProductTable
+            products={paginatedProducts}
+            onEdit={handleEditProduct}
+          />
         ) : (
           <EmptyState
             title="No products found"
@@ -155,7 +179,22 @@ export function ProductsPage() {
           onCancel={() => setIsCreateModalOpen(false)}
         />
       </Modal>
+
+      {/* Edit Product Modal */}
+      <Modal
+        open={editingProduct !== null}
+        title="Edit Product"
+        onClose={() => setEditingProduct(null)}
+      >
+        {editingProduct && (
+          <ProductForm
+            categories={categories}
+            initialProduct={editingProduct}
+            onSubmit={handleUpdateProduct}
+            onCancel={() => setEditingProduct(null)}
+          />
+        )}
+      </Modal>
     </>
   );
 }
-

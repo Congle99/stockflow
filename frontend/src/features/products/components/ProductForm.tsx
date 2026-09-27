@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { Product } from "../types";
 import { Button } from "../../../components/ui/Button";
 
 interface ProductFormProps {
   categories: string[];
+  initialProduct?: Product;
   onSubmit: (product: Product) => void;
   onCancel: () => void;
 }
@@ -29,11 +30,31 @@ const initialForm: FormData = {
 
 export function ProductForm({
   categories,
+  initialProduct,
   onSubmit,
   onCancel,
 }: ProductFormProps) {
   const [form, setForm] = useState<FormData>(initialForm);
   const [error, setError] = useState("");
+
+  const isEditMode = Boolean(initialProduct);
+
+  useEffect(() => {
+    if (initialProduct) {
+      setForm({
+        name: initialProduct.name,
+        sku: initialProduct.sku,
+        category: initialProduct.category,
+        price: String(initialProduct.price),
+        stock: String(initialProduct.stock),
+        description: initialProduct.description ?? "",
+      });
+    } else {
+      setForm(initialForm);
+    }
+
+    setError("");
+  }, [initialProduct]);
 
   const handleChange = (
     event: React.ChangeEvent<
@@ -86,19 +107,23 @@ export function ProductForm({
       return;
     }
 
-    const newProduct: Product = {
-      id: crypto.randomUUID(),
+    const product: Product = {
+      id: initialProduct?.id ?? crypto.randomUUID(),
       name: form.name.trim(),
       sku: form.sku.trim().toUpperCase(),
       category: form.category,
       price,
       stock,
-      status: "active",
+      status: initialProduct?.status ?? "active",
       description: form.description.trim(),
     };
 
-    onSubmit(newProduct);
-    setForm(initialForm);
+    onSubmit(product);
+
+    if (!isEditMode) {
+      setForm(initialForm);
+    }
+
     setError("");
   };
 
@@ -251,7 +276,7 @@ export function ProductForm({
         </Button>
 
         <Button type="submit">
-          Create Product
+          {isEditMode ? "Update Product" : "Create Product"}
         </Button>
       </div>
     </form>
