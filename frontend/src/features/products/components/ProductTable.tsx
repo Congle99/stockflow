@@ -97,24 +97,28 @@ export function ProductTable({
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-right">
-  <div className="flex justify-end gap-3">
-    <button
-      type="button"
-      onClick={() => onEdit(product)}
-      className="text-sm font-medium text-blue-600 hover:text-blue-700"
-    >
-      Edit
-    </button>
 
-    <button
-      type="button"
-      onClick={() => onDelete(product)}
-      className="text-sm font-medium text-red-600 hover:text-red-700"
-    >
-      Delete
-    </button>
-  </div>
-</td>
+ 
+
+                  <div className="flex justify-end gap-3">
+                    <button
+                      type="button"
+                      onClick={() => onEdit(product)}
+                      className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onDelete(product)}
+                      className="text-sm font-medium text-red-600 hover:text-red-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+
               </tr>
             ))}
           </tbody>
