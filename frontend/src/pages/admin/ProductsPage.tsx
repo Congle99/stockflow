@@ -29,6 +29,9 @@ export function ProductsPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(
     null,
   );
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(
+  null,
+);
 
   // Get unique categories
   const categories = useMemo(() => {
@@ -100,7 +103,24 @@ export function ProductsPage() {
     );
 
     setEditingProduct(null);
+    
   };
+      // Open delete confirmation
+const handleDeleteProduct = (product: Product) => {
+  setDeletingProduct(product);
+};
+
+// Delete product
+const handleConfirmDelete = () => {
+  if (!deletingProduct) return;
+
+  setProducts((current) =>
+    current.filter((product) => product.id !== deletingProduct.id),
+  );
+
+  setDeletingProduct(null);
+};
+
 
   return (
     <>
@@ -148,10 +168,11 @@ export function ProductsPage() {
 
         {/* Product results */}
         {paginatedProducts.length > 0 ? (
-          <ProductTable
-            products={paginatedProducts}
-            onEdit={handleEditProduct}
-          />
+         <ProductTable
+  products={paginatedProducts}
+  onEdit={handleEditProduct}
+  onDelete={handleDeleteProduct}
+/>
         ) : (
           <EmptyState
             title="No products found"
@@ -195,6 +216,41 @@ export function ProductsPage() {
           />
         )}
       </Modal>
+      {/* Delete Product Modal */}
+<Modal
+  open={deletingProduct !== null}
+  title="Delete Product"
+  onClose={() => setDeletingProduct(null)}
+>
+  {deletingProduct && (
+    <div className="space-y-5">
+      <p className="text-sm leading-6 text-gray-600">
+        Are you sure you want to delete{" "}
+        <span className="font-semibold text-gray-900">
+          {deletingProduct.name}
+        </span>
+        ? This action cannot be undone.
+      </p>
+
+      <div className="flex justify-end gap-3 border-t border-gray-200 pt-5">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => setDeletingProduct(null)}
+        >
+          Cancel
+        </Button>
+
+        <Button
+          type="button"
+          onClick={handleConfirmDelete}
+        >
+          Delete Product
+        </Button>
+      </div>
+    </div>
+  )}
+</Modal>
     </>
   );
 }
